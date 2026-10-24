@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Appointments | MediCare</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    />
+</head>
+
+<body class="patient-history-page">
+
+    <header class="history-header">
+        <a class="history-brand" href="{{ url_for('index') }}">
+            <span class="history-brand-icon">✚</span>
+            <span>MediCare</span>
+        </a>
+
+        <nav class="history-nav">
+            <a href="{{ url_for('index') }}">Book Appointment</a>
+            <a href="{{ url_for('patient_profile') }}">My Profile</a>
+            <a class="history-logout" href="{{ url_for('logout') }}">Logout</a>
+        </nav>
+    </header>
+
+    <main class="history-main">
+
+        <section class="history-intro">
+            <div class="history-intro-icon">📅</div>
+
+            <div>
+                <span class="history-eyebrow">YOUR HEALTH DASHBOARD</span>
+                <h1>My Appointments</h1>
+                <p>Keep track of your bookings and their current status.</p>
+            </div>
+        </section>
+
+        <section class="history-content-card">
+
+            <div class="history-card-heading">
+                <div>
+                    <h2>Appointment History</h2>
+                    <p>Review your appointment details below.</p>
+                </div>
+
+                <a class="history-book-button" href="{{ url_for('index') }}">
+                    + Book Appointment
+                </a>
+            </div>
+
+            {% if appointments %}
+
+                <div class="history-table-wrapper">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Reference</th>
+                                <th>Doctor</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for appointment in appointments %}
+                                <tr>
+                                    <td>
+                                        <span class="history-reference">
+                                            #{{ appointment.id }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="history-doctor">
+                                            {{ appointment.dr or "Not specified" }}
+                                        </span>
+                                    </td>
+
+                                    <td>{{ appointment.date }}</td>
+
+                                    <td>{{ appointment.time }}</td>
+
+                                    <td>
+                                        {% set status = (appointment.status or "Pending")|lower|trim %}
+
+                                        <span class="history-status
+                                            {% if status == 'confirmed' %} status-confirmed
+                                            {% elif status == 'cancelled' %} status-cancelled
+                                            {% elif status == 'completed' %} status-completed
+                                            {% else %} status-pending
+                                            {% endif %}">
+                                            {{ appointment.status or "Pending" }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <p class="history-table-note">
+                    Contact your healthcare provider if you have questions about an appointment.
+                </p>
+
+            {% else %}
+
+                <div class="history-empty-state">
+                    <div class="history-empty-icon">🗓️</div>
+
+                    <h3>No appointments yet</h3>
+
+                    <p>
+                        You haven't booked any appointments. Once you make a
+                        booking, your appointment details will appear here.
+                    </p>
+
+                    <a class="history-book-button"
+                       href="{{ url_for('index') }}">
+                                  {% endif %}
+
+        </section>
+
+        <footer class="history-footer">
+            MediCare · Medical Appointment Portal
+        </footer>
+
+    </main>
+
+</body>
+</html>

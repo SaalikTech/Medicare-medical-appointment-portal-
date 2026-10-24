@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MediCare | Sign In</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+
+  <body class="login-page">
+    <main class="login-container">
+      <section class="login-card">
+        <a class="login-brand" href="{{ url_for('login') }}">
+          <span class="login-brand-icon">✚</span>
+          <span>MediCare</span>
+        </a>
+
+        <p class="login-subtitle">Medical Appointment Portal</p>
+
+        <div class="login-heading">
+          <h1>Welcome back</h1>
+          <p>Sign in to access your account.</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% for category, message in messages %}
+            <div class="flash-message {{ category }}" role="alert">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endwith %}
+
+        <form
+          class="login-form"
+          method="POST"
+          action="{{ url_for('login') }}"
+        >
+          <input
+            type="hidden"
+            name="csrf_token"
+            value="{{ csrf_token() }}"
+          />
+
+          <div class="login-field">
+            <label for="email">Email address</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="you@example.com"
+              autocomplete="username"
+              required
+            />
+          </div>
+
+          <div class="login-field">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              required
+            />
+          </div>
+
+          <button class="login-button" type="submit">
+            Sign In
+            <span aria-hidden="true">→</span>
+          </button>
+        </form>
+
+        <div class="login-security">
+          <span aria-hidden="true">🔒</span>
+          Secure access to your medical portal
+        </div>
+      </section>
+
+      <footer class="login-footer">
+        MediCare · Medical Appointment Portal
+      </footer>
+    </main>
+  </body>
+</html>

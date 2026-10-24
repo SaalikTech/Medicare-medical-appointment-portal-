@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MediCare | Admin Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+
+  <body>
+    <header class="navbar">
+      <a class="brand" href="{{ url_for('admin') }}">
+        <span class="brand-icon">✚</span>
+        <span>MediCare</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="{{ url_for('index') }}">Booking Page</a>
+        <a href="{{ url_for('add_doctor') }}">Add Doctor</a>
+        <a href="{{ url_for('admin_doctors') }}">Manage Doctors</a>
+        <a class="logout-link" href="{{ url_for('logout') }}">Logout</a>
+      </nav>
+    </header>
+
+    <main class="page-container admin-page">
+      <section class="welcome-section admin-welcome">
+        <p class="eyebrow">ADMINISTRATION PORTAL</p>
+        <h1>Admin Dashboard</h1>
+        <p>
+          Manage appointments, monitor booking statuses and access patient
+          medical profiles.
+        </p>
+      </section>
+
+      {% set stats = namespace(
+        total=0,
+        confirmed=0,
+        pending=0,
+        cancelled=0,
+        completed=0,
+        patients=[]
+      ) %}
+
+      {% for b in bookings %}
+        {% set stats.total = stats.total + 1 %}
+
+        {% if b.status == "Confirmed" %}
+          {% set stats.confirmed = stats.confirmed + 1 %}
+        {% elif b.status == "Pending" %}
+          {% set stats.pending = stats.pending + 1 %}
+        {% elif b.status == "Cancelled" %}
+          {% set stats.cancelled = stats.cancelled + 1 %}
+        {% elif b.status == "Completed" %}
+          {% set stats.completed = stats.completed + 1 %}
+        {% endif %}
+
+        {% if b.patient_id and b.patient_id not in stats.patients %}
+          {% set _ = stats.patients.append(b.patient_id) %}
+        {% endif %}
+      {% endfor %}
+
+      <section class="admin-stats">
+        <article class="stat-card">
+          <div class="stat-icon teal">▦</div>
+          <p>Total Appointments</p>
+          <h2>{{ stats.total }}</h2>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-icon green">✓</div>
+          <p>Confirmed</p>
+          <h2>{{ stats.confirmed }}</h2>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-icon amber">◷</div>
+          <p>Pending</p>
+          <h2>{{ stats.pending }}</h2>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-icon blue">♙</div>
+          <p>Linked Patients</p>
+          <h2>{{ stats.patients | length }}</h2>
+        </article>
+      </section>
+
+      <section class="booking-card admin-card">
+        <div class="card-heading admin-card-heading">
+          <div class="heading-icon">📅</div>
+          <div>
+            <h2>Appointment Management</h2>
+            <p>Review appointment records and update their statuses.</p>
+          </div>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% for category, message in messages %}
+            <div class="flash-message {{ category }}" role="alert">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endwith %}
+
+        {% if bookings %}
+          <div class="table-container admin-table-container">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Reference</th>
+                  <th>Patient</th>
+                  <th>Email</th>
+                  <th>Doctor</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Status &amp; Actions</th>
+                  <th>Medical Profile</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for b in bookings %}
+                  <tr>
+                    <td>#{{ b.id }}</td>
+                    <td>{{ b.patient_name or b.user_name }}</td>
+                    <td>{{ b.email }}</td>
+                    <td>{{ b.dr }}</td>
+                    <td>{{ b.date }}</td>
+                    <td>{{ b.time }}</td>
+
+                    <td>
+                      <span class="status-badge">
+                        {{ b.status }}
+                      </span>
+
+                      <form
+                        class="status-form"
+                        action="{{ url_for('update_booking_status', booking_id=b.id) }}"
+                        method="POST"
+                      >
+                        <input
+                          type="hidden"
+                          name="csrf_token"
+                          value="{{ csrf_token() }}"
+                        />
+
+                        <select name="status" aria-label="Appointment status" required>
+                          <option value="Pending" {% if b.status == "Pending" %}selected{% endif %}>
+                            Pending
+                          </option>
+                          <option value="Confirmed" {% if b.status == "Confirmed" %}selected{% endif %}>
+                            Confirmed
+                          </option>
+                          <option value="Cancelled" {% if b.status == "Cancelled" %}selected{% endif %}>
+                            Cancelled
+                          </option>
+                          <option value="Completed" {% if b.status == "Completed" %}selected{% endif %}>
+                            Completed
+                          </option>
+                        </select>
+
+                        <button class="small-action-button" type="submit">
+                          Update
+                        </button>
+                      </form>
+                    </td>
+
+                    <td>
+                      {% if b.patient_id %}
+                        <a
+                          class="profile-table-link"
+                          href="{{ url_for('admin_patient_profile', patient_id=b.patient_id) }}"
+                        >
+                          View Profile →
+                        </a>
+                      {% else %}
+                        <span class="muted-text">Not linked</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="empty-state">
+            <div class="empty-icon">📋</div>
+            <h3>No appointments yet</h3>
+            <p>Appointment records will appear here when bookings are made.</p>
+            <a class="book-button action-link" href="{{ url_for('index') }}">
+              Go to Booking Page
+            </a>
+          </div>
+        {% endif %}
+
+        <div class="admin-footer-actions">
+          <a class="secondary-action" href="{{ url_for('export_json') }}">
+            ↓ Export Appointment Data
+          </a>
+
+          <a class="secondary-action" href="{{ url_for('add_doctor') }}">
+            + Add Doctor
+          </a>
+
+          <a class="secondary-action" href="{{ url_for('admin_doctors') }}">
+            View Doctors
+          </a>
+        </div>
+      </section>
+
+      <footer class="page-footer">
+        <p>MediCare · Medical Appointment Portal</p>
+        <p>Administrative access only</p>
+      </footer>
+    </main>
+  </body>
+</html>

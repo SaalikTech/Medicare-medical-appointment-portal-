@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Medical Profile | MediCare</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    />
+</head>
+
+<body class="patient-profile-page">
+
+    <header class="patient-profile-header">
+        <a href="{{ url_for('index') }}" class="patient-profile-brand">
+            <span class="patient-brand-icon">✚</span>
+            MediCare
+        </a>
+
+        <a href="{{ url_for('index') }}" class="patient-dashboard-link">
+            ← Back to Dashboard
+        </a>
+    </header>
+
+    <main class="patient-profile-main">
+
+        <section class="patient-profile-intro">
+            <div class="patient-avatar">👤</div>
+
+            <div>
+                <span class="patient-profile-eyebrow">MY ACCOUNT</span>
+                <h1>My Medical Profile</h1>
+                <p>View your personal and medical information in one place.</p>
+            </div>
+        </section>
+
+        <section class="patient-profile-card">
+
+            <div class="patient-card-heading">
+                <div class="patient-section-icon">♙</div>
+                <div>
+                    <h2>Personal Details</h2>
+                    <p>Your personal and contact information</p>
+                </div>
+            </div>
+
+            <div class="patient-detail-grid">
+                <div class="patient-detail-item">
+                    <span>Full Name</span>
+                    <strong>{{ patient.full_name or "Not provided" }}</strong>
+                </div>
+
+                <div class="patient-detail-item">
+                    <span>Email Address</span>
+                    <strong>{{ patient.email or "Not provided" }}</strong>
+                </div>
+
+                <div class="patient-detail-item">
+                    <span>Date of Birth</span>
+                    <strong>{{ patient.date_of_birth or "Not provided" }}</strong>
+                </div>
+
+                <div class="patient-detail-item">
+                    <span>Address</span>
+                    <strong>{{ patient.address or "Not provided" }}</strong>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="patient-profile-card">
+
+            <div class="patient-card-heading">
+                <div class="patient-section-icon">♡</div>
+                <div>
+                    <h2>Medical Details</h2>
+                    <p>Your recorded medical information</p>
+                </div>
+            </div>
+
+            <div class="patient-detail-grid">
+                <div class="patient-detail-item">
+                    <span>Blood Type</span>
+                    <strong>{{ patient.blood_type or "Not provided" }}</strong>
+                </div>
+            </div>
+
+            <p class="patient-profile-note">
+                If any information is missing or incorrect, please contact your healthcare provider.
+            </p>
+
+        </section>
+
+        <section class="patient-profile-card">
+
+            <div class="patient-card-heading">
+                <div class="patient-section-icon">✚</div>
+                <div>
+                    <h2>GP Details</h2>
+                    <p>Your registered general practitioner</p>
+                </div>
+            </div>
+
+            <div class="patient-detail-grid">
+                <div class="patient-detail-item">
+                    <span>GP Name</span>
+                    <strong>{{ patient.gp_name or "Not provided" }}</strong>
+                </div>
+
+                <div class="patient-detail-item">
+                    <span>GP Contact</span>
+                    <strong>{{ patient.gp_contact or "Not provided" }}</strong>
+                </div>
+            </div>
+
+        </section>
+
+        <footer class="patient-profile-footer">
+            MediCare · Your healthcare information
+        </footer>
+
+    </main>
+
+</body>
+</html>

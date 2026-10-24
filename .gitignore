@@ -12,6 +12,9 @@ env/
 frontend/node_modules/
 frontend/dist/
 
+# Node.js dependencies, anywhere in the project
+node_modules/
+
 # Python cache and tests
 __pycache__/
 .pytest_cache/

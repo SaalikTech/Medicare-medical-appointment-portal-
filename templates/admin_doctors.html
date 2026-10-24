@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MediCare | Doctor Management</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+
+  <body>
+    <header class="navbar">
+      <a class="brand" href="{{ url_for('admin') }}">
+        <span class="brand-icon">✚</span>
+        <span>MediCare</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="{{ url_for('admin') }}">Dashboard</a>
+        <a href="{{ url_for('add_doctor') }}">Add Doctor</a>
+        <a href="{{ url_for('index') }}">Booking Page</a>
+        <a class="logout-link" href="{{ url_for('logout') }}">Logout</a>
+      </nav>
+    </header>
+
+    <main class="page-container doctors-page">
+      <section class="welcome-section doctors-welcome">
+        <p class="eyebrow">ADMINISTRATION PORTAL</p>
+        <h1>Doctor Management</h1>
+        <p>
+          View your registered doctors and their professional information.
+        </p>
+      </section>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+          <div class="flash-message {{ category }}" role="alert">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endwith %}
+
+      <section class="booking-card doctors-card">
+        <div class="doctors-toolbar">
+          <div class="card-heading">
+            <div class="heading-icon">🩺</div>
+            <div>
+              <h2>Doctor Directory</h2>
+              <p>
+                {% if doctors %}
+                  {{ doctors | length }} doctor profile{% if doctors | length != 1 %}s{% endif %} registered
+                {% else %}
+                  Your registered doctors will appear here.
+                {% endif %}
+              </p>
+            </div>
+          </div>
+
+          <a class="book-button action-link" href="{{ url_for('add_doctor') }}">
+            + Add New Doctor
+          </a>
+        </div>
+
+        {% if doctors %}
+          <div class="table-container doctors-table-container">
+            <table class="doctors-table">
+              <thead>
+                <tr>
+                  <th>Doctor</th>
+                  <th>Email</th>
+                  <th>Speciality</th>
+                  <th>Qualifications</th>
+                  <th>Hospital</th>
+                  <th>Department</th>
+                  <th>Station</th>
+                  <th>Salary</th>
+                  <th>Availability</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for doctor in doctors %}
+                  <tr>
+                    <td>
+                      <div class="doctor-name-cell">
+                        <span class="doctor-avatar">✚</span>
+                        <span>{{ doctor.full_name }}</span>
+                      </div>
+                    </td>
+
+                    <td>{{ doctor.email }}</td>
+                    <td>
+                      <span class="speciality-badge">
+                        {{ doctor.speciality }}
+                      </span>
+                    </td>
+                    <td>{{ doctor.qualifications or "Not provided" }}</td>
+                    <td>{{ doctor.hospital or "Not provided" }}</td>
+                    <td>{{ doctor.department or "Not provided" }}</td>
+                    <td>{{ doctor.station or "Not provided" }}</td>
+                    <td>
+                      {% if doctor.salary is not none %}
+                        {{ "%.2f"|format(doctor.salary) }}
+                      {% else %}
+                        Not provided
+                      {% endif %}
+                    </td>
+                    <td>
+                      <span class="availability-badge">
+                        {{ doctor.availability or "Not provided" }}
+                      </span>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="empty-state">
+            <div class="empty-icon">🩺</div>
+            <h3>No doctor profiles yet</h3>
+            <p>
+              Add your first doctor to start building your medical team
+              directory.
+            </p>
+            <a class="book-button action-link" href="{{ url_for('add_doctor') }}">
+              + Add Your First Doctor
+            </a>
+          </div>
+        {% endif %}
+      </section>
+
+      <footer class="page-footer">
+        <p>MediCare · Medical Appointment Portal</p>
+        <p>Doctor Management</p>
+      </footer>
+    </main>
+  </body>
+</html>
