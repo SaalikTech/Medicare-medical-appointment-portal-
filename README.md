@@ -9,6 +9,14 @@ The system includes booking conflict checks to help prevent double-booking and s
 
 It uses Flask for the backend, React and TypeScript for the frontend, and PostgreSQL for data storage, providing a structured and secure foundation for managing medical appointments.
 
+## Login Page
+![Login page](screenshots/loginpagemedicare.png)
+
+## Patients Appointments
+![patient dashboard ](screenshots/patientdashboard.png)
+
+## Admin Dashboard 
+![admin dashboard ](screenshots/admindashboard.png)
 ---
 
 ## Features
@@ -81,7 +89,11 @@ Configure PostgreSQL connection & environment variables as required by the appli
 Start the Flask server:
 python app.py
 
-Backend: `http://127.0.0.1:5000`
+## Run Locally
+
+Start the Flask backend and open:
+
+[Open MediCare](http://localhost:5000)
 
 ### 2. Start the Frontend
 
@@ -95,8 +107,9 @@ npm install
 
 Start the React development server:
 npm run dev
+## Frontend
 
-Frontend: `http://localhost:5173`
+[Open React Frontend](http://localhost:5173)
 
 Open the frontend URL displayed by Vite in your browser.
 
@@ -114,8 +127,11 @@ The production-ready frontend files are generated in the `frontend/dist` directo
 
 **Note:** Keep the Flask backend and React development server running in separate terminals while using the application. Ensure PostgreSQL is running and the database connection is configured correctly.
 
-## Architecture
+Admin: a
+### Architecture
 
 Want to understand how MediCare works behind the scenes?
+
+Read the [Application Architecture](ARCHITECTURE.md) document for details about the system design, technology stack, database structure, authentication, security, and appointment booking flow.
 
 Read the [Application Architecture](ARCHITECTURE.md) document for details about the system design, technology stack, database structure, authentication, security, and appointment booking flow.
