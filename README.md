@@ -131,11 +131,8 @@ The production-ready frontend files are generated in the `frontend/dist` directo
 
 **Note:** Keep the Flask backend and React development server running in separate terminals while using the application. Ensure PostgreSQL is running and the database connection is configured correctly.
 
-Admin: a
 ### Architecture
 
 Want to understand how MediCare works behind the scenes?
-
-Read the [Application Architecture](ARCHITECTURE.md) document for details about the system design, technology stack, database structure, authentication, security, and appointment booking flow.
 
 Read the [Application Architecture](ARCHITECTURE.md) document for details about the system design, technology stack, database structure, authentication, security, and appointment booking flow.
