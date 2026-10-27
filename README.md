@@ -29,7 +29,7 @@ It uses Flask for the backend, React and TypeScript for the frontend, and Postgr
 - Manage **patient profile** information.
 - **View available doctors** 
 - **Book** medical appointments.
-- ***View appointment** history and **booking status**.
+- **View appointment** history and **booking status**.
 
 **Administrator**
 - **Access a protected** admin dashboard.
