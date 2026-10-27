@@ -10,7 +10,7 @@ The system includes booking conflict checks to help prevent double-booking and s
 It uses Flask for the backend, React and TypeScript for the frontend, and PostgreSQL for data storage, providing a structured and secure foundation for managing medical appointments.
 
 ## Login Page
-![Login page](screenshots/loginpagemedicare.png)
+![MediCare Login Page](screenshots/loginpagemedicare.png)
 
 ## Patients Appointments
 ![patient dashboard ](screenshots/patientdashboard.png)
